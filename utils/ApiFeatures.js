@@ -1,3 +1,4 @@
+/** Helper class that will be used to search, filter products based on parameters passed while calling API  */
 class APIFeatures{
     constructor(query, queryStr){
         this.query = query      // DATABASE query
@@ -20,7 +21,9 @@ class APIFeatures{
         return this
     }
 
-    // Get products ==> /api/products?keyword=apple
+    // Get products ==> /api/products?keyword=apple&category=Grocery
+    // Get products ==> /api/products?price[gte]=100&price[lte]=2000
+    // Get products ==> /api/products?category=Grocery&price[lte]=200
     filter(){
         const { category, price } = this.queryStr
         let queryCopy = {...this.queryStr}
