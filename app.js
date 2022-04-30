@@ -21,7 +21,8 @@ connectToDB()
 app.get('/', (req, res)=>{
     res.send('WELCOME HOME')
 })
-app.use('/products', productRoutes)
+// Base URL = /api/products
+app.use('/api/products', productRoutes)
 
 
 app.listen(8000, (req, res)=>{
