@@ -6,6 +6,11 @@
             type: String,
             required: true
         },
+        category:{
+            type: String,
+            enum:['Clothes', 'Mobiles', 'Computers & Laptops', 'Grocery', 'Accessories'],
+            required: true
+        },
         description:{    
             type: String,
             required: true
