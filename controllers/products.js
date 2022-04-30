@@ -6,7 +6,7 @@ module.exports.getProducts = async (req, res)=>{
     // returns all products
     //Get products ==> /api/products?keyword=apple
     try {
-        console.log(req.query);
+        // console.log(req.query);
         const apiFeature = new APIFeatures(Product.find(), req.query).search().filter()
 
         const products = await apiFeature.query

@@ -1,7 +1,7 @@
 class APIFeatures{
     constructor(query, queryStr){
-        this.query = query
-        this.queryStr = queryStr
+        this.query = query      // DATABASE query
+        this.queryStr = queryStr    // URL query
     }
     //Get products ==> /api/products?keyword=apple
     search(){
@@ -22,11 +22,21 @@ class APIFeatures{
 
     // Get products ==> /api/products?keyword=apple
     filter(){
-        const queryCopy = {...this.queryStr}
+        const { category, price } = this.queryStr
+        let queryCopy = {...this.queryStr}
 
         // Removing field from query string
         const removeFields = ['keyword', 'limit', 'page']
         removeFields.forEach(el => delete queryCopy[el])
+
+        // Advance filter for price, rating, etc
+        if(price){
+            let queryString = JSON.stringify(queryCopy)
+            const pattern = /(gte|gt|lte|lt)/g
+            queryString = queryString.replace(pattern, match => `$${match}`)
+    
+            queryCopy = JSON.parse(queryString)
+        }
 
         this.query = this.query.find({...queryCopy})
 
