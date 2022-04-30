@@ -1,11 +1,16 @@
 const Product = require('../models/product')
 const ExpressError = require('../utils/ExpressError')
-
+const APIFeatures = require('../utils/ApiFeatures')
 
 module.exports.getProducts = async (req, res)=>{
     // returns all products
+    //Get products ==> /api/products?keyword=apple
     try {
-        const products = await Product.find({})   
+        const apiFeature = new APIFeatures(Product.find(), req.query).search()
+
+        // const products = await Product.find({})  
+        const products = await apiFeature.query
+         
         res.status(200).json({
             success: true,
             count: products.length,
