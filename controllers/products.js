@@ -6,14 +6,21 @@ const catchAsync = require('../utils/catchAsync')
 module.exports.getProducts = catchAsync(
     async (req, res)=>{
         // returns all products
+        const resPerPage = 3
+        const productCount = await Product.countDocuments() // total no of documents in product collection
+        
         //Get products ==> /api/products?keyword=apple
         // console.log(req.query);
-        const apiFeature = new APIFeatures(Product.find(), req.query).search().filter()
+        const apiFeature = new APIFeatures(Product.find(), req.query)
+                                .search()
+                                .filter()
+                                .pagination(resPerPage)
 
         const products = await apiFeature.query
          
         res.status(200).json({
             success: true,
+            totalProducts: productCount,
             count: products.length,
             products
         })  
@@ -21,7 +28,6 @@ module.exports.getProducts = catchAsync(
 
 ) 
 module.exports.getSpecificProduct = catchAsync(
-
     async (req, res)=>{
        // returns product with given id
         const { id:product_id } = req.params        
@@ -36,7 +42,6 @@ module.exports.getSpecificProduct = catchAsync(
    }
 ) 
 module.exports.createProduct = catchAsync(
-
     async (req, res)=>{
         // adds given product
         let new_product = req.body                  // grab data from request
@@ -48,8 +53,7 @@ module.exports.createProduct = catchAsync(
         })
     }
 ) 
-module.exports.updateProduct = catchAsync(
-    
+module.exports.updateProduct = catchAsync(    
     async (req, res)=>{
         // updates specific product
         const {id} = req.params
@@ -63,8 +67,7 @@ module.exports.updateProduct = catchAsync(
 
     }
 ) 
-module.exports.deleteProduct = catchAsync(
-    
+module.exports.deleteProduct = catchAsync(    
     async (req, res)=>{
         // deletes specific product
         const {id} = req.params

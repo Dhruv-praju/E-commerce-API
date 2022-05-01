@@ -24,16 +24,17 @@ class APIFeatures{
     // Get products ==> /api/products?keyword=apple&category=Grocery
     // Get products ==> /api/products?price[gte]=100&price[lte]=2000
     // Get products ==> /api/products?category=Grocery&price[lte]=200
+    // Get products ==> /api/products?qty[lte]=5
     filter(){
-        const { category, price } = this.queryStr
+        const { category, price, qty } = this.queryStr
         let queryCopy = {...this.queryStr}
 
         // Removing field from query string
         const removeFields = ['keyword', 'limit', 'page']
         removeFields.forEach(el => delete queryCopy[el])
 
-        // Advance filter for price, rating, etc
-        if(price){
+        // Advance filter for price, rating, etc (for given range)
+        if(price || qty){
             let queryString = JSON.stringify(queryCopy)
             const pattern = /(gte|gt|lte|lt)/g
             queryString = queryString.replace(pattern, match => `$${match}`)
@@ -44,6 +45,16 @@ class APIFeatures{
         this.query = this.query.find({...queryCopy})
 
         return this 
+    }
+
+    pagination(resPerPage){
+        // to display only certain no of products in a page
+        // Get products ==> /api/products?page=2
+        const currentPage = Number(this.queryStr.page) || 1
+        const skip = resPerPage * (currentPage - 1)
+        
+        this.query = this.query.skip(skip).limit(resPerPage)
+        return this
     }
 }
 
