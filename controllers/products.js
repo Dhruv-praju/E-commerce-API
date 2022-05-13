@@ -6,7 +6,7 @@ const catchAsync = require('../utils/catchAsync')
 module.exports.getProducts = catchAsync(
     async (req, res)=>{
         // returns all products
-        const resPerPage = 3
+        const resPerPage = 6
         const productCount = await Product.countDocuments() // total no of documents in product collection
         
         //Get products ==> /api/products?keyword=apple

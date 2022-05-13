@@ -2,6 +2,10 @@
     const {Schema, model} = mongoose
 
     const ProductSchema = new Schema({
+        image:{
+            type: String,
+            required: true
+        },
         name:{    
             type: String,
             required: true
@@ -10,6 +14,9 @@
             type: String,
             enum:['Clothes', 'Mobiles', 'Computers & Laptops', 'Grocery', 'Accessories'],
             required: true
+        },
+        company:{
+            type: String
         },
         description:{    
             type: String,
