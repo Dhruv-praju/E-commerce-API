@@ -1,3 +1,4 @@
+const cloudinary = require('cloudinary').v2
 const Product = require('../models/product')
 const ExpressError = require('../utils/ExpressError')
 const APIFeatures = require('../utils/ApiFeatures')
