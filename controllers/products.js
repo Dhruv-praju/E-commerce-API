@@ -4,6 +4,7 @@ const ExpressError = require('../utils/ExpressError')
 const APIFeatures = require('../utils/ApiFeatures')
 const catchAsync = require('../utils/catchAsync')
 
+// Get all products => /api/products
 module.exports.getProducts = catchAsync(
     async (req, res)=>{
         // returns all products
@@ -28,6 +29,7 @@ module.exports.getProducts = catchAsync(
     }
 
 ) 
+// Get product by ID => /api/products/:id
 module.exports.getSpecificProduct = catchAsync(
     async (req, res)=>{
        // returns product with given id
@@ -42,6 +44,7 @@ module.exports.getSpecificProduct = catchAsync(
 
    }
 ) 
+// Create new product => /api/product
 module.exports.createProduct = catchAsync(
     async (req, res)=>{
         // adds given product
@@ -54,6 +57,7 @@ module.exports.createProduct = catchAsync(
         })
     }
 ) 
+// Update product of ID => /api/products/:id
 module.exports.updateProduct = catchAsync(    
     async (req, res)=>{
         // updates specific product
@@ -68,6 +72,7 @@ module.exports.updateProduct = catchAsync(
 
     }
 ) 
+// Delete product of ID => /api/products/:id
 module.exports.deleteProduct = catchAsync(    
     async (req, res)=>{
         // deletes specific product

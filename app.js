@@ -7,6 +7,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const cloudinary = require('cloudinary').v2
 const connectToDB = require('./db_config')
+const cookieParser = require('cookie-parser')
 
 const productRoutes = require('./routes/products')
 const userRoutes = require('./routes/users')
@@ -22,6 +23,7 @@ cloudinary.config({
 
 app.use(express.urlencoded({extended: true}))
 app.use(cors())
+app.use(cookieParser())
 app.use(morgan('dev'))  // request logs
 
 /**DB Setup */

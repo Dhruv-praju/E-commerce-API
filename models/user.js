@@ -25,6 +25,10 @@ const userSchema = new Schema({
             type: String,
             required: true
         }
+    },
+    role:{
+        type: String,
+        default: 'user'
     }
 })
 
@@ -36,7 +40,7 @@ userSchema.pre('save', async function(next){
 userSchema.methods.getJwtToken = function(){
     /* Returns JWT token */
     // generate token by signing with email
-    const token = jwt.sign({email:this.email, id:this._id}, 'secretkey', {expiresIn: process.env.JWT_EXPIRES_TIME})
+    const token = jwt.sign({email:this.email, id:this._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_TIME})
     return token
 }
 
