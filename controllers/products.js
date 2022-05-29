@@ -37,6 +37,7 @@ module.exports.getSpecificProduct = catchAsync(
         
         const product = await Product.findById(product_id)    
         if(!product) throw new ExpressError(404,'Product not found')
+        
         res.status(200).json({
             success: true,
             product        
@@ -49,7 +50,9 @@ module.exports.createProduct = catchAsync(
     async (req, res)=>{
         // adds given product
         let new_product = req.body                  // grab data from request
+        new_product.seller = req.user
         const added_prod = await Product.create(new_product)       // save that in DB
+        
         res.status(200).json({
             success: true,
             message: 'Product created Successfully',
@@ -63,7 +66,9 @@ module.exports.updateProduct = catchAsync(
         // updates specific product
         const {id} = req.params
         const updted_product = await Product.findByIdAndUpdate(id, req.body, {runValidators:true, new:true})
+
         if(!updted_product) throw new ExpressError(404,'Product not found')
+
         res.status(200).json({
             success: true,
             message: 'Product updated Successfully',
@@ -79,6 +84,7 @@ module.exports.deleteProduct = catchAsync(
         const {id} = req.params
         const dtd_product = await Product.findByIdAndDelete(id)
         if(!dtd_product) throw new ExpressError(404, "Producted doesn't exist")
+        
         res.status(200).json({
             success: true,
             message: 'Product deleted Successfully',

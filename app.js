@@ -11,6 +11,8 @@ const cookieParser = require('cookie-parser')
 
 const productRoutes = require('./routes/products')
 const userRoutes = require('./routes/users')
+const adminRoutes = require('./routes/admin')
+const { isAuthenticated, authorizeRoles } = require('./middlewares/auth')
 
 // cloudinary configuration
 cloudinary.config({ 
@@ -41,10 +43,16 @@ app.get('/', (req, res)=>{
 })
 // Base URL = /api/products
 app.use('/api/products', productRoutes)
-app.use('/api/user', userRoutes)
+app.use('/api', userRoutes)
+app.use('/api/admin', isAuthenticated, authorizeRoles('admin'), adminRoutes)
 
 app.listen(8000, (req, res)=>{
     console.log('Server listening at port 8000...');
+})
+/** Error Handling Middleware */
+app.use((err, req, res, next)=>{
+    console.log('ERROR OCCURED',err);
+    res.json({error:err, message:'From error handling middleware'})
 })
 
 /** STATUS CODES
@@ -59,5 +67,7 @@ app.listen(8000, (req, res)=>{
 /** COMMONLY USED CODES
  * 
  *  404 : This means page/file that browser is requesting wasn't found by the server.
+ *  401 : UnAuthenticated
+ *  403 : Unauthorized
  *  500 : This indicates problem with server
  */

@@ -5,8 +5,8 @@ const {isAuthenticated, authorizeRoles} = require('../middlewares/auth')
 
 router.get('/', isAuthenticated, authorizeRoles('admin'), product.getProducts)
 router.get('/:id', product.getSpecificProduct)
-router.post('/', product.createProduct)
-router.put('/:id',  product.updateProduct)
-router.delete('/:id', product.deleteProduct)
+router.post('/', isAuthenticated, authorizeRoles('admin'), product.createProduct)
+router.put('/:id', isAuthenticated, authorizeRoles('admin'), product.updateProduct)
+router.delete('/:id', isAuthenticated, authorizeRoles('admin'), product.deleteProduct)
 
 module.exports = router;

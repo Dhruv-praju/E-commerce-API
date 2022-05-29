@@ -29,6 +29,11 @@
         qty:{    
             type: Number,
             required: true
+        },
+        seller:{
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
         }
     })
 

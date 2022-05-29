@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const {Schema, model} = mongoose
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
 
 const userSchema = new Schema({
     name:{
@@ -29,7 +30,13 @@ const userSchema = new Schema({
     role:{
         type: String,
         default: 'user'
-    }
+    },
+    createdAt:{
+        type: String,
+        default: (new Date()).toISOString().slice(0, 10).split("-").reverse().join("/")
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date
 })
 
 userSchema.pre('save', async function(next){
@@ -48,6 +55,17 @@ userSchema.methods.comparePassword = async function(enteredPassword){
     /* Compares entered password with the hashed password in DB */
     const result = await bcrypt.compare(enteredPassword, this.password)
     return result
+}
+
+userSchema.methods.getResetPasswordToken = async function(){
+    /** Returns token to reset password */
+    // generate token
+    const token = crypto.randomBytes(20).toString('hex')
+    // hash the token and store hash 
+    this.resetPasswordToken = crypto.createHash('sha256').update(token).digest('hex')
+    // set token expire time
+    this.resetPasswordExpire = Date.now() + 30 * 1000 * 60
+    return token
 }
 
 const User = new model('User',userSchema)
