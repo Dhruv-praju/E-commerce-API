@@ -10,9 +10,8 @@ const connectToDB = require('./db_config')
 const cookieParser = require('cookie-parser')
 
 const productRoutes = require('./routes/products')
-const userRoutes = require('./routes/users')
-const adminRoutes = require('./routes/admin')
-const { isAuthenticated, authorizeRoles } = require('./middlewares/auth')
+const authRoutes = require('./routes/auth')
+const userRoutes = require('./routes/user')
 
 // cloudinary configuration
 cloudinary.config({ 
@@ -43,8 +42,8 @@ app.get('/', (req, res)=>{
 })
 // Base URL = /api/products
 app.use('/api/products', productRoutes)
-app.use('/api', userRoutes)
-app.use('/api/admin', isAuthenticated, authorizeRoles('admin'), adminRoutes)
+app.use('/api', authRoutes)
+app.use('/api/users', userRoutes)
 
 app.listen(8000, (req, res)=>{
     console.log('Server listening at port 8000...');

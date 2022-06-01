@@ -45,7 +45,7 @@ module.exports.getSpecificProduct = catchAsync(
 
    }
 ) 
-// Create new product => /api/product
+// Create new product => /api/product/new
 module.exports.createProduct = catchAsync(
     async (req, res)=>{
         // adds given product
@@ -60,7 +60,7 @@ module.exports.createProduct = catchAsync(
         })
     }
 ) 
-// Update product of ID => /api/products/:id
+// Update product of ID => /api/products/update/:id
 module.exports.updateProduct = catchAsync(    
     async (req, res)=>{
         // updates specific product
@@ -77,7 +77,7 @@ module.exports.updateProduct = catchAsync(
 
     }
 ) 
-// Delete product of ID => /api/products/:id
+// Delete product of ID => /api/products/delete/:id
 module.exports.deleteProduct = catchAsync(    
     async (req, res)=>{
         // deletes specific product

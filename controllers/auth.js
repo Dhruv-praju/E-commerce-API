@@ -5,7 +5,7 @@ const catchAsync = require("../utils/catchAsync")
 const ExpressError = require("../utils/ExpressError")
 const sendEmail = require('../utils/sendEmail')
 
-// Login user => /api/login
+// Login user   =>    /api/login
 module.exports.logIn = catchAsync(
     async (req, res) => {
         const {email, password} = req.body
@@ -39,7 +39,7 @@ module.exports.logIn = catchAsync(
 
 )
 
-// Sign Up user => /api/signup
+// Sign Up user   =>    /api/signup
 module.exports.signUp = catchAsync(
     async (req, res) => {
        const {email, password, firstName, lastName, role='user'} = req.body
@@ -77,7 +77,7 @@ module.exports.signUp = catchAsync(
    }
 )
 
-// Forgot Password => /api/password/forgot/
+// Forgot Password  =>   /api/password/forgot/
 module.exports.forgotPassword = catchAsync(
     /** Sends recovery email to user for reseting password */
     async(req, res) => {
@@ -116,7 +116,7 @@ module.exports.forgotPassword = catchAsync(
     }
 )
 
-// Reset Password => /api/password/reset/:token
+// Reset Password   =>    /api/password/reset/:token
 module.exports.resetPassword = catchAsync(
     async (req, res) => {
         /** Resets Password in DB */
@@ -159,7 +159,7 @@ module.exports.resetPassword = catchAsync(
     }
 )
 
-// Logout user => /api/logout
+// Logout user  =>   /api/logout
 module.exports.logOut = async (req, res) => {
     // set cookie token to null
     res.cookie('token', null, {
@@ -170,9 +170,23 @@ module.exports.logOut = async (req, res) => {
     res.status(200).json({success: true, message: 'Logged out'})
 } 
 
-// Get current logged in user details => /api/me
+// Get current logged in user details   =>    /api/me
 module.exports.getUserProfile = catchAsync(
     async (req, res)=>{
         res.status(200).json({success:true, user:req.user})
+    }
+)
+
+// Update user profile   =>   /api/me/update/
+module.exports.updateUserProfile = catchAsync(
+    async(req, res)=>{
+        const {_id:id} = req.user
+        const {firstName, lastName, email} = req.body
+        const user = await User.findByIdAndUpdate(id, {name:`${firstName} ${lastName}`, email}, {runValidators:true, new:true})
+        
+        res.status(200).json({
+            success:true,
+            user
+        })
     }
 )
