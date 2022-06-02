@@ -4,7 +4,7 @@ const products = [
         name:'Watch',
         description:'Lorm Ipsm oasnasofd',
         price: 342,
-        qty: 12,
+        stock: 12,
         category:'Accessories',
         company:'Titan'
     },
@@ -13,7 +13,7 @@ const products = [
         name:'OnePlus Nord CE 5G',
         description:'Lorm Ipsm oasnasofd',
         price: 32,
-        qty: 10,
+        stock: 10,
         category:'Mobiles',
         company:'OnePlus'
     },
@@ -22,7 +22,7 @@ const products = [
         name:'Apple Airpods',
         description:'Lorm Ipsm oasnasofd',
         price: 24,
-        qty: 2,
+        stock: 2,
         category:'Accessories',
         company:'Apple'
     },
@@ -31,7 +31,7 @@ const products = [
         name:'Apple Macbook Pro',
         description:'Lorm Ipsm oasnasofd',
         price: 820,
-        qty: 5,
+        stock: 5,
         category:'Computers & Laptops',
         company:'Apple'
     },
@@ -40,7 +40,7 @@ const products = [
         name:'SAMSUNG SSD T7 Portable External Solid State Drive',
         description:'Lorm Ipsm oasnasofd',
         price: 112,
-        qty: 1,
+        stock: 1,
         category:'Accessories',
         company:'Samsung'
     },
@@ -49,7 +49,7 @@ const products = [
         name:'Alphanso Mangoes 1 dozen(12 pcs)',
         description:'Lorm Ipsm oasnasofd',
         price: 412,
-        qty: 1,
+        stock: 1,
         category:'Grocery',
         company:''
     },
@@ -58,7 +58,7 @@ const products = [
         name:'Lenovo IdeaCenter 3',
         description:'Lorm Ipsm oasnasofd',
         price: 4200,
-        qty: 4,
+        stock: 4,
         category:'Computers & Laptops',
         company:'Lenovo'
     },
@@ -67,7 +67,7 @@ const products = [
         name:'Mens Sports Tshirt (Grey color)',
         description:'Lorm Ipsm oasnasofd',
         price: 200,
-        qty: 4,
+        stock: 4,
         category:'Clothes',
         company:'Levis'
     },

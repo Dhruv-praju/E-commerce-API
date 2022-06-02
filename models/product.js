@@ -1,7 +1,7 @@
     const mongoose = require('mongoose')
     const {Schema, model} = mongoose
 
-    const ProductSchema = new Schema({
+    const productSchema = new Schema({
         image:{
             type: String,
             required: true
@@ -26,7 +26,7 @@
             type: Number,
             required: true
         },
-        qty:{    
+        stock:{    
             type: Number,
             required: true
         },
@@ -37,6 +37,6 @@
         }
     })
 
-    const Product = new model('Product', ProductSchema)
+    const Product = new model('Product', productSchema)
 
     module.exports = Product

@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser')
 const productRoutes = require('./routes/products')
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
+const orderRoutes = require('./routes/orders')
 
 // cloudinary configuration
 cloudinary.config({ 
@@ -23,6 +24,7 @@ cloudinary.config({
 
 
 app.use(express.urlencoded({extended: true}))
+app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
 app.use(morgan('dev'))  // request logs
@@ -41,9 +43,10 @@ app.get('/', (req, res)=>{
     res.send('WELCOME HOME')
 })
 // Base URL = /api/products
-app.use('/api/products', productRoutes)
 app.use('/api', authRoutes)
+app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/orders', orderRoutes)
 
 app.listen(8000, (req, res)=>{
     console.log('Server listening at port 8000...');
