@@ -92,3 +92,77 @@ module.exports.deleteProduct = catchAsync(
         })
     }
 ) 
+
+// Create new review    =>      /api/products/:id/reviews/new
+module.exports.createProductReview = catchAsync(
+    async (req, res) => {
+        const {id:productId} = req.params
+        const {rating, comment} = req.body
+
+        const review = {
+            user: req.user,
+            name: req.user.name,
+            rating: Number(rating),
+            comment
+        }
+
+        const product = await Product.findById(productId)
+        // check if product is reviewed by the user
+        const isReviewed = product.reviews?.find(rev => rev.user.toString() == req.user._id.toString() ) 
+
+        if(isReviewed){
+            // update the review
+            product.reviews.forEach(rev =>{
+                if(rev.user.toString() == req.user._id.toString()){
+                    rev.comment = comment
+                    rev.rating = rating
+                }
+            })
+            
+            res.status(200)
+        } else {
+            // create new review and push it
+            product.reviews.push(review)
+        }
+        // console.log(product);
+        product.ratings = await product.getAvgRating()        
+        const addedProduct = await product.save()
+
+        res.status(200).json({
+            success: true,
+        })
+    }
+)
+// Get reviews of a product   =>    /api/products/:id/reviews
+module.exports.getProductReviews = catchAsync(
+    async (req, res) =>{
+        const {id} = req.params
+        const product = await Product.findById(id)
+
+        res.status(200).json({
+            success: true,
+            reviews: product.reviews
+        })
+    }
+
+)
+// Delete product review    =>    /api/products/:prodId/reviews/:id/delete
+module.exports.deleteReview = catchAsync(
+    async (req, res) => {
+        const {prodId, id} = req.params
+
+        const product = await Product.findById(prodId)
+
+        const reviews = product.reviews.filter(rev => rev._id.toString() !== id.toString())
+
+        product.reviews = reviews
+        product.ratings = await product.getAvgRating()
+        
+        await product.save()
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully deleted the review'
+        })
+    }
+)
