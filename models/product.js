@@ -3,8 +3,14 @@ const {Schema, model} = mongoose
 
 const productSchema = new Schema({
     image:{
-        type: String,
-        required: true
+        url:{
+            type: String,
+            required: true
+        },
+        filename:{
+            type: String,
+            required: true
+        }
     },
     name:{    
         type: String,
@@ -20,7 +26,8 @@ const productSchema = new Schema({
     },
     description:{    
         type: String,
-        required: true
+        required: true,
+        default: 'Lorm Ipsm oasnasofd'
     },
     price:{    
         type: Number,

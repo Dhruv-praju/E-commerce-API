@@ -51,6 +51,14 @@ module.exports.createProduct = catchAsync(
         // adds given product
         let new_product = req.body                  // grab data from request
         new_product.seller = req.user
+
+        if(!req.file) throw new ExpressError(404, 'Please provide image of product') 
+        // console.log(req.file);
+        const {path, filename} = req.file
+        new_product.image = {
+            url: path,
+            filename
+        }
         const added_prod = await Product.create(new_product)       // save that in DB
         
         res.status(200).json({
@@ -65,7 +73,15 @@ module.exports.updateProduct = catchAsync(
     async (req, res)=>{
         // updates specific product
         const {id} = req.params
-        const updted_product = await Product.findByIdAndUpdate(id, req.body, {runValidators:true, new:true})
+        const product = req.body || {}
+        if(req.file){
+            const {path, filename} = req.file
+            product.image = {
+                url: path,
+                filename
+            }
+        }
+        const updted_product = await Product.findByIdAndUpdate(id, product, {runValidators:true, new:true})
 
         if(!updted_product) throw new ExpressError(404,'Product not found')
 
@@ -85,6 +101,9 @@ module.exports.deleteProduct = catchAsync(
         const dtd_product = await Product.findByIdAndDelete(id)
         if(!dtd_product) throw new ExpressError(404, "Producted doesn't exist")
         
+        // delete images in cloudinary
+        cloudinary.uploader.destroy(dtd_product.image.filename)
+
         res.status(200).json({
             success: true,
             message: 'Product deleted Successfully',
