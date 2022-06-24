@@ -6,7 +6,7 @@ const ExpressError = require("../utils/ExpressError");
 // Checks if user is authenticated or not
 const isAuthenticated = catchAsync(
     async (req, res, next) => {
-        const { token } = req.cookies
+        const { token } = req.session
     
         if(!token) throw(new ExpressError(401, 'User is not authenticated'))
         

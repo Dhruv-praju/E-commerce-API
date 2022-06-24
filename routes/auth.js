@@ -7,6 +7,8 @@ const { isAuthenticated } = require('../middlewares/auth')
 router.get('/me', isAuthenticated, auth.getUserProfile)
 router.put('/me/update', isAuthenticated, auth.updateUserProfile)
 
+router.post('/google/auth', auth.googleAuth)
+
 router.post('/login', auth.logIn)
 router.post('/signup', auth.signUp)
 router.get('/logout', auth.logOut)

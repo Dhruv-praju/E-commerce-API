@@ -7,18 +7,35 @@ const morgan = require('morgan')
 const cors = require('cors')
 const cloudinary = require('cloudinary').v2
 const connectToDB = require('./db_config')
-const cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 const productRoutes = require('./routes/products')
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
 const orderRoutes = require('./routes/orders')
 
-
+const sessionOptions = {
+    name:'session',
+    resave: false,
+    saveUninitialized: false,
+    secret : 'mylittlesecret',
+    cookie: {
+        // domain: 'localhost:2000',
+        // sameSite: 'lax',
+        expires: new Date(
+            Date.now() + process.env.COOKIE_EXPIRES_TIME * 1000 * 60 * 60 * 24
+        ),
+        httpOnly: false,
+        secure: false
+    }
+}
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-app.use(cors())
-app.use(cookieParser())
+app.use(cors({
+    origin: process.env.CLIENT_URL ,     // client URL
+    credentials: true
+}))
+app.use(session(sessionOptions))
 app.use(morgan('dev'))  // request logs
 
 /**DB Setup */

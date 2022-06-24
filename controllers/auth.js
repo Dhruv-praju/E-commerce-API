@@ -5,6 +5,43 @@ const catchAsync = require("../utils/catchAsync")
 const ExpressError = require("../utils/ExpressError")
 const sendEmail = require('../utils/sendEmail')
 
+// Google Auth user =>   /api/google/auth
+module.exports.googleAuth = catchAsync(
+    async (req, res) => {
+        console.log('DOING GOOGLE AUTH');
+        const {name, email, picture} = req.body
+
+        // find if email already exist
+        const existingUser = await User.findOne({email})
+
+        if(existingUser){
+            // generate token by signing with email
+            const token = existingUser.getJwtToken()
+
+            req.session.token = token
+            res.status(200).json({ 
+                success:true, 
+                user:existingUser, 
+                token 
+            })
+        } else {
+            // create user and save in DB
+            const user = await User.create({name, email, avatar:{url:picture}})
+
+            const token = user.getJwtToken()
+
+            req.session.token = token
+            req.session.cookie.expires = new Date(
+                Date.now() + process.env.COOKIE_EXPIRES_TIME * 1000 * 60 * 60 * 24
+                )
+            res.status(200).json({
+                success: true,
+                user,
+                token
+            })
+        }
+    }
+)
 // Login user   =>    /api/login
 module.exports.logIn = catchAsync(
     async (req, res) => {
@@ -21,14 +58,9 @@ module.exports.logIn = catchAsync(
                 else{
                     // generate token by signing with email
                     const token = existingUser.getJwtToken()
-                    // options for cookie
-                    const options = {
-                        expires: new Date(
-                            Date.now() + process.env.COOKIE_EXPIRES_TIME * 1000 * 60 * 60 * 24
-                        ),
-                        httpOnly: true
-                    }
-                    res.status(200).cookie('token', token, options).json({ 
+
+                    req.session.token = token
+                    res.status(200).json({ 
                         success:true, 
                         user:existingUser, 
                         token 
@@ -61,14 +93,12 @@ module.exports.signUp = catchAsync(
                })
                // create jwt token
                const token = user.getJwtToken()
-               // options for cookie
-               const options = {
-                   expires: new Date(
-                       Date.now() + process.env.COOKIE_EXPIRES_TIME * 1000 * 60 * 60 * 24
-                   ),
-                   httpOnly: true
-               }
-               res.status(200).cookie('token', token, options).json({ 
+               
+               req.session.token = token
+               req.session.cookie.expires = new Date(
+                Date.now() + process.env.COOKIE_EXPIRES_TIME * 1000 * 60 * 60 * 24
+                )
+               res.status(200).json({ 
                 success:true, 
                 user, 
                 token 
@@ -82,13 +112,13 @@ module.exports.forgotPassword = catchAsync(
     /** Sends recovery email to user for reseting password */
     async(req, res) => {
         const { email } = req.body
-        let user = await User.findOne({email})
+        const user = await User.findOne({email})
         if(!user) throw(new ExpressError(404, 'User not found with this email'))
         
         // get reset token
         const resetToken = await user.getResetPasswordToken()
         await user.save({validateBeforeSave: false})
-
+        // console.log(user);
         // create reset password url
         const resetUrl = `${req.protocol}://${req.get('host')}/api/password/reset/${resetToken}`
 
@@ -142,19 +172,9 @@ module.exports.resetPassword = catchAsync(
 
         await user.save()
 
-        // give token
-        const token = user.getJwtToken()
-           // options for cookie
-           const options = {
-               expires: new Date(
-                   Date.now() + process.env.COOKIE_EXPIRES_TIME * 1000 * 60 * 60 * 24
-               ),
-               httpOnly: true
-           }
-           res.status(200).cookie('token', token, options).json({ 
-            success:true, 
-            user, 
-            token 
+        res.status(200).json({ 
+         success:true, 
+         user
         })
     }
 )
@@ -162,11 +182,8 @@ module.exports.resetPassword = catchAsync(
 // Logout user  =>   /api/logout
 module.exports.logOut = async (req, res) => {
     // set cookie token to null
-    res.cookie('token', null, {
-        expires: new Date(Date.now()),
-        httpOnly: true
-    })
-    
+    req.session.token = null
+    req.session.cookie.expires = new Date(Date.now())
     res.status(200).json({success: true, message: 'Logged out'})
 } 
 

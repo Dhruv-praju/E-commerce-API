@@ -15,12 +15,12 @@ const userSchema = new Schema({
     },
     password:{
         type: String,
-        required: true
+        // required: true
     },
     avatar:{
         public_id:{
             type: String,
-            required: true
+            // required: true
         },
         url: {
             type: String,
@@ -41,6 +41,9 @@ const userSchema = new Schema({
 
 userSchema.pre('save', async function(next){
     /* Hashes the password before storing it */
+    if (!this.isModified('password')) {
+        next()
+    }
     this.password = await bcrypt.hash(this.password, 12)
 })
 
