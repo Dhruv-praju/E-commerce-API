@@ -10,7 +10,7 @@ module.exports.makeOrder = catchAsync(
             orderItems,
             paymentInfo,
             shipmentInfo,
-            itemPrice,
+            itemsPrice,
             shippingPrice,
             taxPrice,
             totalPrice
@@ -22,7 +22,7 @@ module.exports.makeOrder = catchAsync(
             orderItems,
             paymentInfo,
             shipmentInfo,
-            itemPrice,
+            itemsPrice,
             shippingPrice,
             taxPrice,
             totalPrice

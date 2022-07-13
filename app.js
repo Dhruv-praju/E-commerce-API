@@ -13,6 +13,7 @@ const productRoutes = require('./routes/products')
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
 const orderRoutes = require('./routes/orders')
+const paymentRoutes = require('./routes/payments')
 
 const sessionOptions = {
     name:'session',
@@ -56,6 +57,7 @@ app.use('/api', authRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
+app.use('/api/payment', paymentRoutes)
 
 app.listen(8000, (req, res)=>{
     console.log('Server listening at port 8000...');

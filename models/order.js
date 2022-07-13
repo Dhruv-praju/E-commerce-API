@@ -40,6 +40,10 @@ const orderSchema = new Schema({
             pincode:{
                 type: Number,
                 required: true
+            },
+            phoneNo:{
+                type: Number,
+                required: true
             }
         },
         deliveredAt:{
@@ -52,7 +56,7 @@ const orderSchema = new Schema({
             default: 'pending'
         }
     },
-    itemPrice: {
+    itemsPrice: {
         type:Number,
         required: true
     },
